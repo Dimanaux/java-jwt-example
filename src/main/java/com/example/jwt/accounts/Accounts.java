@@ -30,10 +30,6 @@ public class Accounts implements UserDetailsService {
         this.encoder = encoder;
     }
 
-    public Optional<Account> byUsername(String username) {
-        return repository.findFirstByUsernameIgnoreCase(username);
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return byUsername(username)
@@ -55,8 +51,8 @@ public class Accounts implements UserDetailsService {
         return repository.save(account);
     }
 
-    public Optional<Account> findById(Long id) {
-        return repository.findById(id);
+    private Optional<Account> byUsername(String username) {
+        return repository.findFirstByUsernameIgnoreCase(username);
     }
 
     private Token createTokenForAccount(Account account) {
