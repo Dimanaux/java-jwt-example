@@ -1,6 +1,8 @@
 package com.example.jwt.config.security.auth.jwt;
 
 import com.example.jwt.accounts.Account;
+import com.example.jwt.accounts.AccountDetails;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -9,19 +11,27 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.security.Key;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 
 public class JwtAuthentication implements Authentication {
     private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+    private Account account;
     private String token;
 
     public JwtAuthentication(String jwt) {
         this.token = jwt;
+        Claims body = Jwts.parser().setSigningKey(key).parseClaimsJws(jwt).getBody();
+        Long id = Long.parseLong(body.get("id", String.class));
+        String username = body.get("username", String.class);
+        this.account = new Account(id, username);
     }
 
     public JwtAuthentication(Account account) {
+        this.account = account;
+        LinkedHashMap<String, Object> claims = new LinkedHashMap<>(account.toMap());
         token = Jwts.builder()
-                .setClaims(account.toMap())
+                .addClaims(claims)
                 .signWith(key)
                 .compact();
     }
@@ -33,12 +43,12 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return account.getPasswordHash();
     }
 
     @Override
     public Object getDetails() {
-        return null;
+        return new AccountDetails(account);
     }
 
     @Override
@@ -48,7 +58,7 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public boolean isAuthenticated() {
-        return false;
+        return true;
     }
 
     @Override
@@ -58,6 +68,16 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return null;
+        return account.getUsername();
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public LinkedHashMap<String, String> toMap() {
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put("jwt", token);
+        return map;
     }
 }

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class JwtAuthenticationFilter implements Filter {
-    private static final String JWT_HEADER = "JWT";
+    static final String JWT_HEADER = "JWT";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

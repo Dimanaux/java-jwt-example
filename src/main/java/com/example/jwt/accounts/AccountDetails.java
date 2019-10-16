@@ -7,7 +7,6 @@ import java.util.Collection;
 
 public class AccountDetails implements UserDetails {
     private final Account account;
-    private Token token;
 
     public AccountDetails(Account account) {
         this.account = account;
@@ -50,13 +49,5 @@ public class AccountDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public Token getCurrentToken() {
-        return token;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
     }
 }

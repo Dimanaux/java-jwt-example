@@ -1,7 +1,7 @@
 package com.example.jwt.config.security;
 
-import com.example.jwt.config.security.auth.token.TokenAuthenticationFilter;
-import com.example.jwt.config.security.auth.token.TokenAuthenticationProvider;
+import com.example.jwt.config.security.auth.jwt.JwtAuthenticationFilter;
+import com.example.jwt.config.security.auth.jwt.JwtAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +20,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @ComponentScan("com.example.jwt") // говорим, чтобы искал все компоненты в наших пакетах
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // подключем провайдер, который мы написали
-    private final TokenAuthenticationProvider provider;
+    private final JwtAuthenticationProvider provider;
 
-    public SecurityConfig(TokenAuthenticationProvider provider) {
+    public SecurityConfig(JwtAuthenticationProvider provider) {
         this.provider = provider;
     }
+
 
     // конфигурируем AuthenticationManager
     @Override
@@ -41,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // отключаем сессии
         http.sessionManagement().disable();
         // добавляем наш фильтр
-        http.addFilterBefore(new TokenAuthenticationFilter(), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(), BasicAuthenticationFilter.class);
         // говорим, что разрешаем Swagger
         http.authorizeRequests().antMatchers("/swagger-ui.html#/**").permitAll();
     }

@@ -17,6 +17,11 @@ public class Account {
     public Account() {
     }
 
+    public Account(Long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
     public Account(String username, String passwordHash) {
         this.username = username;
         this.passwordHash = passwordHash;
