@@ -1,6 +1,6 @@
 package com.example.jwt.accounts;
 
-import com.example.jwt.config.security.auth.jwt.JwtAuthentication;
+import  com.example.jwt.config.security.JwtAuthentication;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +22,10 @@ public class Accounts implements UserDetailsService {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.encoder = encoder;
+    }
+
+    public Optional<Account> findById(Long id) {
+        return repository.findById(id);
     }
 
     @Override

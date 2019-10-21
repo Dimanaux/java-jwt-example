@@ -1,9 +1,9 @@
 package com.example.jwt.web;
 
-import com.example.chats.accounts.Account;
-import com.example.chats.accounts.AccountDetails;
-import com.example.chats.messages.Message;
-import com.example.chats.messages.Messages;
+import com.example.jwt.accounts.Account;
+import com.example.jwt.accounts.AccountDetails;
+import com.example.jwt.messages.Message;
+import com.example.jwt.messages.Messages;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

@@ -2,7 +2,7 @@ package com.example.jwt.web;
 
 import com.example.jwt.accounts.Account;
 import com.example.jwt.accounts.Accounts;
-import com.example.jwt.config.security.auth.jwt.JwtAuthentication;
+import com.example.jwt.config.security.JwtAuthentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

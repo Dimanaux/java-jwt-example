@@ -1,6 +1,6 @@
 package com.example.jwt.messages;
 
-import com.example.chats.accounts.Account;
+import com.example.jwt.accounts.Account;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.example.jwt.messages;
 
-import com.example.chats.accounts.Account;
+import com.example.jwt.accounts.Account;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package com.example.jwt.config.security.auth.jwt;
+package com.example.jwt.config.security;
 
 import com.example.jwt.accounts.Account;
 import com.example.jwt.accounts.AccountDetails;
