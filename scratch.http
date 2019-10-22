@@ -33,6 +33,22 @@ Content-Type: application/json
 ###
 
 GET localhost:8080/hello
-jwt: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImRpbWEifQ.gv3Kp2lSxAHyiX3We_TB774JJnrb3ovOUwqGjdhmA0A
+jwt: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImRpbWEifQ.qJz1spBuomwt5Odd8Iw_L1-6ZSVPWznI4_0o1aTAOUM
 
+###
+
+GET localhost:8080/messages
+jwt: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjIiLCJ1c2VybmFtZSI6InVzZXIifQ.nZNV27ngJ2LWu2raQOrkCEcKFyLAmpdq1e7PewY1NfM
+
+###
+
+POST localhost:8080/messages
+Content-Type: application/json
+jwt: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6ImRpbWEifQ.qJz1spBuomwt5Odd8Iw_L1-6ZSVPWznI4_0o1aTAOUM
+
+{
+  "text": "Hello, I'm Dima!"
+}
+
+###
 # { "id": "1", "username": "dima", "text": "hello, dima" } expected

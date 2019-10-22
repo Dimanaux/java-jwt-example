@@ -3,16 +3,21 @@ package com.example.jwt.web;
 import com.example.jwt.accounts.Account;
 import com.example.jwt.accounts.AccountDetails;
 import com.example.jwt.accounts.Accounts;
+import com.example.jwt.config.security.JwtAuthentication;
+import io.jsonwebtoken.Jwt;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.Optional;
 
-@Controller
+@RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class AccountsController {
     private final Accounts accounts;
 
@@ -20,32 +25,44 @@ public class AccountsController {
         this.accounts = accounts;
     }
 
-    @GetMapping("/join")
-    public String joinPage() {
-        return "join";
-    }
-
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";
-    }
-
-    @PostMapping(value = "/join", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public String register(@RequestParam("username") String username,
-                           @RequestParam("password") String password) {
-        accounts.create(username, password);
-        return "redirect:/login";
-    }
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/welcome")
-    @ResponseBody
-    public String welcome(@AuthenticationPrincipal Authentication authentication) {
-        Account currentAccount = ((AccountDetails) authentication.getPrincipal()).getAccount();
-        return "welcome, " + currentAccount.toMap();
+    public ResponseEntity<String> welcome(@AuthenticationPrincipal Authentication authentication) {
+        JwtAuthentication jwtAuthentication = (JwtAuthentication) SecurityContextHolder.getContext().getAuthentication();
+        Account currentAccount = jwtAuthentication.getAccount();
+        return ResponseEntity.ok("welcome, " + currentAccount.toMap());
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping("/login")
+    public ResponseEntity<LinkedHashMap<String, String>> login(@RequestBody LinkedHashMap<String, String> credentials) {
+        return ResponseEntity.ok(accounts.jwtLogin(credentials));
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping("/join")
+    public ResponseEntity<?> join(@RequestBody LinkedHashMap<String, String> credentials) {
+        String username = credentials.get("username");
+        String password = credentials.get("password");
+        return ResponseEntity.ok(accounts.create(username, password).toMap());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/hello")
+    public ResponseEntity<Object> hello() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthentication) {
+            JwtAuthentication jwtAuthentication = (JwtAuthentication) authentication;
+            Account account = jwtAuthentication.getAccount();
+            LinkedHashMap<String, String> response = account.toMap();
+            response.put("text", "Hello, " + response.get("username"));
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.ok("Cannot authenticate via JWT.");
+        }
     }
 
     @GetMapping("/accounts/{id}")
-    @ResponseBody
     public ResponseEntity<?> accountInfo(@PathVariable("id") Long id) {
         Optional<Account> account = accounts.findById(id);
         return account

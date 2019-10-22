@@ -36,7 +36,7 @@ public class Messages {
         try {
             wait();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.err.println("There was 1 client waiting for messages.");
         }
     }
 }
